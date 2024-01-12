@@ -1,6 +1,6 @@
 package com.chengzi.chengzioj.service.impl;
 
-import static com.chengzi.chengzioj.constant.UserConstant.USER_LOGIN_STATE;
+
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,24 +15,17 @@ import com.chengzi.chengzioj.model.vo.LoginUserVO;
 import com.chengzi.chengzioj.model.vo.UserVO;
 import com.chengzi.chengzioj.service.UserService;
 import com.chengzi.chengzioj.utils.SqlUtils;
-import com.chengzi.chengzioj.common.ErrorCode;
-import com.chengzi.chengzioj.constant.CommonConstant;
-import com.chengzi.chengzioj.exception.BusinessException;
-import com.chengzi.chengzioj.mapper.UserMapper;
 import com.chengzi.chengzioj.model.dto.user.UserQueryRequest;
 import com.chengzi.chengzioj.model.entity.User;
-import com.chengzi.chengzioj.model.enums.UserRoleEnum;
-import com.chengzi.chengzioj.model.vo.LoginUserVO;
-import com.chengzi.chengzioj.model.vo.UserVO;
-import com.chengzi.chengzioj.service.UserService;
-import com.chengzi.chengzioj.utils.SqlUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -182,6 +175,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User getLoginUserPermitNull(HttpServletRequest request) {
+
         // 先判断是否已登录
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
         User currentUser = (User) userObj;

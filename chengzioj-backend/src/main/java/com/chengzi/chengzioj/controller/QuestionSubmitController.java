@@ -1,11 +1,19 @@
 package com.chengzi.chengzioj.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.chengzi.chengzioj.annotation.AuthCheck;
 import com.chengzi.chengzioj.common.BaseResponse;
 import com.chengzi.chengzioj.common.ErrorCode;
 import com.chengzi.chengzioj.common.ResultUtils;
+import com.chengzi.chengzioj.constant.UserConstant;
 import com.chengzi.chengzioj.exception.BusinessException;
+import com.chengzi.chengzioj.model.dto.question.QuestionQueryRequest;
 import com.chengzi.chengzioj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.chengzi.chengzioj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
+import com.chengzi.chengzioj.model.entity.Question;
+import com.chengzi.chengzioj.model.entity.QuestionSubmit;
 import com.chengzi.chengzioj.model.entity.User;
+import com.chengzi.chengzioj.model.vo.QuestionSubmitVO;
 import com.chengzi.chengzioj.service.QuestionSubmitService;
 import com.chengzi.chengzioj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,4 +61,19 @@ public class QuestionSubmitController {
         return ResultUtils.success(questionSubmitId);
     }
 
+    /**
+     * 分页获取题目提交列表
+     *
+     * @param questionSubmitQueryRequest
+     * @return
+     */
+    @PostMapping("/list/page")
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest, HttpServletRequest request) {
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        final User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage,loginUser));
+    }
 }

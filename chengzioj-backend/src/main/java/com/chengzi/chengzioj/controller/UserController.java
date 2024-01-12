@@ -10,13 +10,6 @@ import com.chengzi.chengzioj.constant.UserConstant;
 import com.chengzi.chengzioj.exception.BusinessException;
 import com.chengzi.chengzioj.service.UserService;
 import com.chengzi.chengzioj.annotation.AuthCheck;
-import com.chengzi.chengzioj.common.BaseResponse;
-import com.chengzi.chengzioj.common.DeleteRequest;
-import com.chengzi.chengzioj.common.ErrorCode;
-import com.chengzi.chengzioj.common.ResultUtils;
-import com.chengzi.chengzioj.config.WxOpenConfig;
-import com.chengzi.chengzioj.constant.UserConstant;
-import com.chengzi.chengzioj.exception.BusinessException;
 import com.chengzi.chengzioj.exception.ThrowUtils;
 import com.chengzi.chengzioj.model.dto.user.UserAddRequest;
 import com.chengzi.chengzioj.model.dto.user.UserLoginRequest;
@@ -27,7 +20,6 @@ import com.chengzi.chengzioj.model.dto.user.UserUpdateRequest;
 import com.chengzi.chengzioj.model.entity.User;
 import com.chengzi.chengzioj.model.vo.LoginUserVO;
 import com.chengzi.chengzioj.model.vo.UserVO;
-import com.chengzi.chengzioj.service.UserService;
 
 import java.util.List;
 import javax.annotation.Resource;
@@ -41,12 +33,7 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.chengzi.chengzioj.service.impl.UserServiceImpl.SALT;
 

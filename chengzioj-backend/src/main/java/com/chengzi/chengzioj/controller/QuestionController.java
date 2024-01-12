@@ -10,15 +10,13 @@ import com.chengzi.chengzioj.common.ResultUtils;
 import com.chengzi.chengzioj.constant.UserConstant;
 import com.chengzi.chengzioj.exception.BusinessException;
 import com.chengzi.chengzioj.exception.ThrowUtils;
-import com.chengzi.chengzioj.model.dto.question.QuestionAddRequest;
-import com.chengzi.chengzioj.model.dto.question.QuestionEditRequest;
-import com.chengzi.chengzioj.model.dto.question.QuestionQueryRequest;
-import com.chengzi.chengzioj.model.dto.question.QuestionUpdateRequest;
+import com.chengzi.chengzioj.model.dto.question.*;
 import com.chengzi.chengzioj.model.entity.Question;
 import com.chengzi.chengzioj.model.entity.User;
 import com.chengzi.chengzioj.model.vo.QuestionVO;
 import com.chengzi.chengzioj.service.QuestionService;
 import com.chengzi.chengzioj.service.UserService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,17 +35,14 @@ import java.util.List;
 @RequestMapping("/question")
 @Slf4j
 public class QuestionController {
-
     @Resource
     private QuestionService questionService;
-
     @Resource
     private UserService userService;
-
     // region 增删改查
 
     /**
-     * 创建
+     * 创建题目
      *
      * @param questionAddRequest
      * @param request
@@ -64,6 +59,14 @@ public class QuestionController {
         if (tags != null) {
             question.setTags(JSONUtil.toJsonStr(tags));
         }
+        List<JudgeCase> judgeCase = questionAddRequest.getJudgeCase();
+        if (judgeCase != null) {
+            question.setJudgeCase(JSONUtil.toJsonStr(judgeCase));
+        }
+        JudgeConfig judgeConfig = questionAddRequest.getJudgeConfig();
+        if (judgeConfig != null) {
+            question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
+        }
         questionService.validQuestion(question, true);
         User loginUser = userService.getLoginUser(request);
         question.setUserId(loginUser.getId());
@@ -76,7 +79,7 @@ public class QuestionController {
     }
 
     /**
-     * 删除
+     * 删除题目
      *
      * @param deleteRequest
      * @param request
@@ -101,7 +104,7 @@ public class QuestionController {
     }
 
     /**
-     * 更新（仅管理员）
+     * 更新题目（仅管理员）
      *
      * @param questionUpdateRequest
      * @return
@@ -118,6 +121,14 @@ public class QuestionController {
         if (tags != null) {
             question.setTags(JSONUtil.toJsonStr(tags));
         }
+        List<JudgeCase> judgeCase = questionUpdateRequest.getJudgeCase();
+        if (judgeCase != null) {
+            question.setJudgeCase(JSONUtil.toJsonStr(judgeCase));
+        }
+        JudgeConfig judgeConfig = questionUpdateRequest.getJudgeConfig();
+        if (judgeConfig != null) {
+            question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
+        }
         // 参数校验
         questionService.validQuestion(question, false);
         long id = questionUpdateRequest.getId();
@@ -129,7 +140,30 @@ public class QuestionController {
     }
 
     /**
-     * 根据 id 获取
+     * 根据 id 获取题目
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/get")
+    public BaseResponse<Question> getQuestionById(long id, HttpServletRequest request) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Question question = questionService.getById(id);
+        if (question == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        //仅本人或者管理员能够查看所有的题目信息
+        if (!question.getUserId().equals(loginUser) && !userService.isAdmin(loginUser)){
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        return ResultUtils.success(question);
+    }
+
+    /**
+     * 根据 id 获取题目(脱敏)
      *
      * @param id
      * @return
@@ -147,7 +181,7 @@ public class QuestionController {
     }
 
     /**
-     * 分页获取列表（仅管理员）
+     * 分页获取题目列表（仅管理员）
      *
      * @param questionQueryRequest
      * @return
@@ -163,7 +197,7 @@ public class QuestionController {
     }
 
     /**
-     * 分页获取列表（封装类）
+     * 分页获取题目列表（封装类）
      *
      * @param questionQueryRequest
      * @param request
@@ -171,7 +205,7 @@ public class QuestionController {
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-            HttpServletRequest request) {
+                                                               HttpServletRequest request) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
@@ -182,7 +216,7 @@ public class QuestionController {
     }
 
     /**
-     * 分页获取当前用户创建的资源列表
+     * 分页获取当前用户创建的题目列表
      *
      * @param questionQueryRequest
      * @param request
@@ -190,7 +224,7 @@ public class QuestionController {
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-            HttpServletRequest request) {
+                                                                 HttpServletRequest request) {
         if (questionQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -207,7 +241,7 @@ public class QuestionController {
 
 
     /**
-     * 编辑（用户）
+     * 编辑题目（用户）
      *
      * @param questionEditRequest
      * @param request
@@ -223,6 +257,14 @@ public class QuestionController {
         List<String> tags = questionEditRequest.getTags();
         if (tags != null) {
             question.setTags(JSONUtil.toJsonStr(tags));
+        }
+        List<JudgeCase> judgeCase = questionEditRequest.getJudgeCase();
+        if (judgeCase != null) {
+            question.setJudgeCase(JSONUtil.toJsonStr(judgeCase));
+        }
+        JudgeConfig judgeConfig = questionEditRequest.getJudgeConfig();
+        if (judgeConfig != null) {
+            question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
         }
         // 参数校验
         questionService.validQuestion(question, false);

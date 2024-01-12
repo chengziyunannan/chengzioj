@@ -91,10 +91,13 @@ public class QuestionVO implements Serializable {
         Question question = new Question();
         BeanUtils.copyProperties(questionVO, question);
         List<String> tagList = questionVO.getTags();
-        question.setTags(JSONUtil.toJsonStr(tagList));
-
+        if (tagList != null) {
+            question.setTags(JSONUtil.toJsonStr(tagList));
+        }
         JudgeConfig judgeConfig = questionVO.getJudgeConfig();
-        question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
+        if (judgeConfig != null) {
+            question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
+        }
         return question;
     }
 
