@@ -103,3 +103,6 @@ knife4j:
         api-rule-resources:
           - com.chengzi.chengzioj.controller
     concat: 橙子
+# 代码沙箱配置
+codesandbox:
+  type: example
