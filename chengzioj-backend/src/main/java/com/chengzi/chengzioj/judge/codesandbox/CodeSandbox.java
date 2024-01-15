@@ -2,6 +2,7 @@ package com.chengzi.chengzioj.judge.codesandbox;
 
 import com.chengzi.chengzioj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.chengzi.chengzioj.judge.codesandbox.model.ExecuteCodeResponse;
+import lombok.Data;
 
 
 /**

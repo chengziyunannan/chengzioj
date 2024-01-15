@@ -1,4 +1,4 @@
-package com.chengzi.chengzioj.model.dto.questionsubmit;
+package com.chengzi.chengzioj.judge.codesandbox.model;
 
 import lombok.Data;
 

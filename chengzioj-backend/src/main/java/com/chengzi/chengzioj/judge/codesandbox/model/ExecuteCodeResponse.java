@@ -1,6 +1,5 @@
 package com.chengzi.chengzioj.judge.codesandbox.model;
 
-import com.chengzi.chengzioj.model.dto.questionsubmit.JudgeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +25,7 @@ public class ExecuteCodeResponse {
     /**
      * 执行状态
      */
-    private String status;
+    private Integer questionStatus;
     /**
      * 判题信息
      */

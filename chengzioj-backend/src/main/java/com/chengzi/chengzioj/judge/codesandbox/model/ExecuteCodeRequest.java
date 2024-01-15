@@ -15,7 +15,7 @@ public class ExecuteCodeRequest {
     /**
      * 输入用例
      */
-    private List<String> inputCase;
+    private List<String> inputCaseList;
 
     /**
      * 代码语言

@@ -2,7 +2,7 @@ package com.chengzi.chengzioj.model.vo;
 
 import cn.hutool.json.JSONUtil;
 
-import com.chengzi.chengzioj.model.dto.questionsubmit.JudgeInfo;
+import com.chengzi.chengzioj.judge.codesandbox.model.JudgeInfo;
 import com.chengzi.chengzioj.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
